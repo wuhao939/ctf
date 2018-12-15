@@ -5,8 +5,8 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: 292329
-    url: jdbc:mysql://localhost:3306/ctf
-    #url: jdbc:mysql://39.105.176.104:3306/ctf
+    #url: jdbc:mysql://localhost:3306/ctf
+    url: jdbc:mysql://39.105.176.104:3306/ctf
 
   jpa:
     open-in-view: true
