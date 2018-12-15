@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: ctf
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 292329
+    url: jdbc:mysql://localhost:3306/ctf
+  jpa:
+    open-in-view: true
+server:
+  port: 8080

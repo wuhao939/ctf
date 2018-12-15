@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <script type="text/javascript" src="static/js/jquery-3.2.0.min.js"></script>
+</head>
+<body>
+用户名:<input type="text" id="username" value=""><br>
+密码:<input type="password" id="password1" value=""><br>
+再次输入密码:<input type="password" id="password2" value=""><br>
+手机:<input type="text" id="telnum" value=""><br>
+<input id="login" type="submit" value="注册" onclick="register()">
+<script type="text/javascript">
+    function register() {
+        if ($("#password1").val()!=$("#password2").val()){
+            alert("密码不一致");
+            $("#password1").val("");
+            $("#password2").val("")
+        }else if ($("#password1").val()==""||$("#username").val()==""||$("#telnum").val()==""){
+            alert("未填写用户名或密码")
+        }else{
+            $.ajax({
+                'url': 'http://localhost:8080/account/register',
+                'type': 'POST',
+                'dataType': 'json',
+                'data': JSON.stringify({
+                    "username": $('#username').val(),
+                    "password": $('#password1').val(),
+                    "telnum": $('#telnum').val()
+                }),
+                'contentType': 'application/json; charset=UTF-8',
+                'success': function (data) {
+                    switch (data.status) {
+                        case 1:
+                            alert('账户已存在');
+                            $("#password1").val("");
+                            $("#password2").val("");
+                            $("#username").val("");
+                            $("#telnum").val("")
+                            break;
+                        case 0: {
+                            alert("注册成功，前往登录界面");
+                            window.location.href = '/login.html';
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+
+    }
+</script>
+</body>
+</html>

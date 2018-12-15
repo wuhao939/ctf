@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
+		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" type="text/css" href="css/ui.css"/>
+		<script type="text/javascript" src="js/jquery-3.2.0.min.js"></script>
+		<!--<script type="text/javascript" src="js/global_variable.js"></script>-->
+	</head>
+	<body style="background: url(img/bgbg.png) no-repeat;background-size: 100% 100%;">
+		<div class="register_outbox">
+			<p style="font-family: 'Polar';color: #fff;font-size: 30px;font-weight: bold;text-align: center;">Login</p>
+			<div class="re_box" style="height: 240px;">
+				<p>
+					<span class="re_text">学号</span>
+					<input type="text" name="" id="username" value="" placeholder="请输入学号" class="re_ipt"/>
+				</p>
+				<p class="mt_20">
+					<span class="re_text">密码</span>
+					<input type="text" name="" id="password" value="" placeholder="请输入密码" class="re_ipt"/>
+				</p>
+				<p class="mt_20">
+					<span class="re_text">验证码</span>
+					<input type="text" name="" id="code" value="" placeholder="请输入验证码" class="re_ipt"/>
+					<img id="img" src="http://localhost:8080/account/check" onclick="refresh()"><br>
+				</p>
+				
+				<p class="mt_30">
+					<button class="f_btn" onclick="login()">
+						登 录
+					</button>
+					
+				</p>
+			</div>
+		</div>
+		<script type="text/javascript">
+            function refresh() {
+                var url = "/account/check?number="+Math.random()
+                document.getElementById("img").setAttribute("src",url)
+            }
+            function clear() {
+                $('#password').val("");
+                $('#code').val("");
+            }
+            function login() {
+                if ($('#username').val()=="") {
+                    alert("未填写用户名");
+                    clear();
+                    return;
+                }
+                else if ($('#password').val()=="") {
+                    alert("未填写密码");
+                    clear();
+                    return;
+                }
+                else if ($('#code').val()==""){
+                    alert("未填写验证码");
+                    clear();
+                    return;
+                }
+                $.ajax({
+                    'url': '/account/login',
+                    'type': 'POST',
+                    'dataType': 'json',
+                    'data': JSON.stringify({
+                        "username": $('#username').val(),
+                        "password": $('#password').val(),
+                        "code":$('#code').val()
+                    }),
+                    'contentType': 'application/json; charset=UTF-8',
+                    'success': function (data) {
+                        switch (data.status) {
+                            case 1:
+                                alert('账户不存在或密码错误');
+                                clear();
+                                refresh();
+                                break;
+                            case 2:
+                                alert('验证码填写错误');
+                                refresh();
+                                break;
+                            case 0: {
+                                sessionStorage.setItem("isLogin", "1");
+                                sessionStorage.setItem("username", data.username);
+                                window.location.href = '/html/home.html';
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
+		</script>
+	</body>
+</html>

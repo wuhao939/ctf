@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
+		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" type="text/css" href="css/ui.css"/>
+		<script type="text/javascript" src="js/jquery-3.2.0.min.js"></script>
+		<script type="text/javascript" src="js/global_variable.js"></script>
+	</head>
+	<body style="background: url(img/bgbg.png) no-repeat;background-size: 100% 100%;">
+		<div class="register_outbox">
+			<p style="font-family: 'Polar';color: #fff;font-size: 30px;font-weight: bold;text-align: center;">Register</p>
+			<div class="re_box">
+				<p>
+					<span class="re_text">学号</span>
+					<input type="text"  id="username" value="" placeholder="请输入学号" class="re_ipt"/>
+				</p>
+				<p class="mt_20">
+					<span class="re_text">密码</span>
+					<input type="text"  id="password1" value="" placeholder="请输入密码" class="re_ipt"/>
+				</p>
+				<p class="mt_20">
+					<span class="re_text">确认密码</span>
+					<input type="text"  id="password2" value="" placeholder="请确认密码" class="re_ipt"/>
+				</p>
+				<p>
+					<span class="re_text">电话</span>
+					<input type="text"  id="telnum" value="" placeholder="请输入学号" class="re_ipt"/>
+				</p>
+				<p class="mt_30">
+					<button class="f_btn" onclick="register()">
+						注 册
+					</button>
+					
+				</p>
+			</div>
+		</div>
+		<script type="text/javascript">
+            function register() {
+                if ($("#password1").val()!=$("#password2").val()){
+                    alert("密码不一致");
+                    $("#password1").val("");
+                    $("#password2").val("")
+                }else if ($("#password1").val()==""||$("#username").val()==""||$("#telnum").val()==""){
+                    alert("未填写用户名或密码")
+                }else{
+                    $.ajax({
+                        'url': $("#root_path").val()+'/account/register',
+                        'type': 'POST',
+                        'dataType': 'json',
+                        'data': JSON.stringify({
+                            "username": $('#username').val(),
+                            "password": $('#password1').val(),
+                            "telnum": $('#telnum').val()
+                        }),
+                        'contentType': 'application/json; charset=UTF-8',
+                        'success': function (data) {
+                            switch (data.status) {
+                                case 1:
+                                    alert('账户已存在');
+                                    $("#password1").val("");
+                                    $("#password2").val("");
+                                    $("#username").val("");
+                                    $("#telnum").val("")
+                                    break;
+                                case 0: {
+                                    alert("注册成功，前往登录界面");
+                                    window.location.href = '/login.html';
+                                    break;
+                                }
+                            }
+                        }
+                    })
+                }
+
+            }
+		</script>
+	</body>
+</html>
